@@ -5,12 +5,16 @@ class QuickTimer extends HTMLElement{
         this.endDate = null
     }
     connectedCallback(){
-        const {start,duration} = this.dataset;
     
-        this.dataset.seconds=10;
+        this.timeToGo = document.createElement("div")
+        this.appendChild(this.timeToGo);
+    
+        this.timeStart = document.createElement("div")
+        this.appendChild(this.timeStart);
+    
     
         this.formater = new Intl.DurationFormat("de-DE", { style: "long" })
-        this.textContent= this.formater.format(this.dataset);
+        this.timeToGo.textContent= this.formater.format(this.dataset);
         
         this.addEventListener("command", event=>{
             if (event.command === "--start") {
@@ -25,19 +29,18 @@ class QuickTimer extends HTMLElement{
 
     stop(){
         this.endDate = null
-        this.pause()
-    }
-    pause(){
         clearInterval(this.interval);
         this.interval = null;
     }
+    
     start(){    
         if (this.interval) return; // already running, ignore
 
-        
         const dur1 = Temporal.Duration.from(this.dataset);
         this.endDate = Temporal.Now.plainDateTimeISO().add(dur1)
-        this.dataset.end= this.endDate;
+        this.timeStart.textContent= this.endDate;
+        
+        
         
         this.update()
         this.interval = setInterval(() => this.update(), 1000);
@@ -47,7 +50,7 @@ class QuickTimer extends HTMLElement{
     update(){
         const now = Temporal.Now.plainDateTimeISO();
         const duration = now.until(this.endDate, { smallestUnit: "seconds" });
-        this.textContent= this.formater.format(duration);
+        this.timeToGo.textContent= this.formater.format(duration);
     }
 
 }
