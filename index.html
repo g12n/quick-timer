@@ -21,6 +21,7 @@
 <button commandfor="myTimer" command="--stop">clear timer</button>
 
 <script src='https://cdn.jsdelivr.net/npm/temporal-polyfill@0.3.0/global.min.js'></script>
+<script type="module" async src="https://unpkg.com/invokers-polyfill@latest/invoker.min.js"></script>
 <script>
   console.log(Temporal.Now.zonedDateTimeISO().toString())
 </script>
