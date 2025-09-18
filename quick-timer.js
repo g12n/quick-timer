@@ -9,8 +9,8 @@ class QuickTimer extends HTMLElement{
         this.timeToGo = document.createElement("div")
         this.appendChild(this.timeToGo);
     
-        this.timeStart = document.createElement("div")
-        this.appendChild(this.timeStart);
+        this.endTimeElement = document.createElement("div")
+        this.appendChild(this.endTimeElement);
     
     
         this.formater = new Intl.DurationFormat("de-DE", { style: "long" })
@@ -22,17 +22,29 @@ class QuickTimer extends HTMLElement{
         this.addEventListener("command", event=>{
             if (event.command === "--start") {
                 this.start()
-            } else if (event.command === "--pause") {
-                this.pause();
             } else if (event.command === "--stop") {
                 this.stop();
             }
         })
+        
+        if (localStorage.getItem("endDate")) {
+        
+        const stored= localStorage.getItem("endDate");
+        console.log(stored) 
+this.endDate = Temporal.PlainDateTime.from(stored); 
+
+this.start();
+} else {
+this.endDate = null
+}
+        
+        
+        
     }
 
     stop(){
         this.endDate = null
-        this.timeToGo.textContent= this.formater.format(this.dataset);
+        localStorage.removeItem("endDate");this.timeToGo.textContent= this.formater.format(this.dataset);
         clearInterval(this.interval);
         this.interval = null;
     }
@@ -40,13 +52,18 @@ class QuickTimer extends HTMLElement{
     start(){    
         if (this.interval) return; // already running, ignore
 
+if(!this.endDate){
         const dur1 = Temporal.Duration.from(this.dataset);
         this.endDate = Temporal.Now.plainDateTimeISO().add(dur1)
-        this.timeStart.textContent= this.dateFormat.format(this.endDate);
+
+
+        localStorage.setItem("endDate",this.endDate)
+ }
         
-        
+
         
         this.update()
+                                this.endTimeElement.textContent= this.dateFormat.format(this.endDate);
         this.interval = setInterval(() => this.update(), 1000);
         console.log(this.interval)
     }
