@@ -14,6 +14,9 @@ class QuickTimer extends HTMLElement{
     
     
         this.formater = new Intl.DurationFormat("de-DE", { style: "long" })
+        
+                this.dateFormat = new Intl.DateTimeFormat("de-DE", { style: "long" })
+                
         this.timeToGo.textContent= this.formater.format(this.dataset);
         
         this.addEventListener("command", event=>{
@@ -29,6 +32,7 @@ class QuickTimer extends HTMLElement{
 
     stop(){
         this.endDate = null
+        this.timeToGo.textContent= this.formater.format(this.dataset);
         clearInterval(this.interval);
         this.interval = null;
     }
@@ -38,7 +42,7 @@ class QuickTimer extends HTMLElement{
 
         const dur1 = Temporal.Duration.from(this.dataset);
         this.endDate = Temporal.Now.plainDateTimeISO().add(dur1)
-        this.timeStart.textContent= this.endDate;
+        this.timeStart.textContent= this.dateFormat.format(this.endDate);
         
         
         
