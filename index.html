@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<template id="mainTimer">
+    <span data-key="hours"></span> :
+    <span data-key="minutes"></span>:
+    <span data-key="seconds"></span>
+</template>
+
+<quick-timer id="myTimer" data-hours="1" data-minutes="60"  rember="timerOne" template="mainTimer">
+</quick-timer>
+
+
+<button commandfor="myTimer" command="--start">Start</button>
+<button commandfor="myTimer" command="--pause">Pause</button>
+<button commandfor="myTimer" command="--stop">clear timer</button>
+
+<script src='https://cdn.jsdelivr.net/npm/temporal-polyfill@0.3.0/global.min.js'></script>
+<script>
+  console.log(Temporal.Now.zonedDateTimeISO().toString())
+</script>
+
+<script type="module" src="quick-timer.js"></script>
+</div>
+</body>
+</html>
